@@ -44,6 +44,7 @@ def handle_clients(client_id=0):
     headers = {
         "Content-Type": "application/json"
     }
+
     if request.method == "POST":
         print("creating client")
         client = request.json
@@ -71,11 +72,37 @@ def handle_clients(client_id=0):
             "status": "HTTP_204_NO_CONTENT. User and tasks deleted."
         }
         status_code = 204
+
     
     return make_response(
         json.dumps(response_body),
         status_code,
         headers
+    )
+
+@app.route('/opportunitys', methods=['POST', 'GET'])
+@app.route('/opportunitys/<opportunity_id>', methods=['DELETE', 'PUT'])
+def handle_opportunitys(opportunity_id=0):
+    headers = {
+        "Content-Type": "application/json"
+    }
+
+    if request.method == "POST":
+        print("creating opportunity")
+        opportunity = request.json
+        print(request.json)
+        new_opportunity = Opportunity(opportunity["project"], opportunity["projectDescription"], opportunity["cost"], opportunity["time"], opportunity["reach"])
+        db.session.add(new_opportunity)
+        db.session.commit()
+        response_body = {
+            "status": "HTTP_200_OK. Ok"
+        }
+        status_code = 200
+    
+    return make_response(
+    json.dumps(response_body),
+    status_code,
+    headers
     )
 
 # this only runs if `$ python src/main.py` is executed

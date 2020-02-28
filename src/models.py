@@ -52,6 +52,31 @@ class Client(db.Model):
             "observations": self.observations
         }
 
+class Opportunity(db.Model): 
+    id = db.Column(db.Integer, primary_key=True) 
+    project = db.Column(db.String(50))
+    project_description = db.Column(db.String(300))
+    cost = db.Column(db.String(50))
+    time = db.Column(db.String(50))
+    reach = db.Column(db.String(50)) 
+    
+    def __init__(self, project, projectDescription, cost, time, reach):
+        self.project = project
+        self.project_description = projectDescription
+        self.cost = cost
+        self.time = time
+        self.reach = reach
+
+    def serialize(self):
+        return {
+            "id": self.id,
+            "project": self.project,
+            "projectDescription": self.project_description,
+            "cost": self.cost,
+            "time": self.time,
+            "reach": self.reach
+        }
+
 # class Person(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
 #     username = db.Column(db.String(80), unique=True, nullable=False)
