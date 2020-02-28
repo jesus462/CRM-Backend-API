@@ -8,7 +8,7 @@ from flask_migrate import Migrate
 from flask_swagger import swagger
 from flask_cors import CORS
 from utils import APIException, generate_sitemap
-from models import db, Client
+from models import db, Client, Opportunity
 #from models import Person
 
 app = Flask(__name__)
@@ -98,6 +98,22 @@ def handle_opportunitys(opportunity_id=0):
             "status": "HTTP_200_OK. Ok"
         }
         status_code = 200
+    
+    elif request.method == "GET":
+        user_opportunity_list = Opportunity.query.all()
+        response_body = []
+        for opportunity in user_opportunity_list:
+            response_body.append(opportunity.serialize())
+        status_code = 200
+    
+    elif request.method == "DELETE":
+        Opportunity.query.filter_by(id=opportunity_id).delete()
+        db.session.commit()
+        response_body = {
+            "result": "ok",
+            "status": "HTTP_204_NO_CONTENT. User and tasks deleted."
+        }
+        status_code = 204
     
     return make_response(
     json.dumps(response_body),
